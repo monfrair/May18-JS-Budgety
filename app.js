@@ -73,7 +73,7 @@ var UIController = (function () {
             return {
                 type: document.querySelector(DOMstrings.inputType).value, //will be either inc or exp
                 description: document.querySelector(DOMstrings.inputDescription).value,
-                value: document.querySelector(DOMstrings.inputValue).value
+                value: parseFloat(document.querySelector(DOMstrings.inputValue).value)
             };
         },
 
@@ -104,9 +104,11 @@ var UIController = (function () {
             fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' + DOMstrings.inputValue);
 
             fieldsArr = Array.prototype.slice.call(fields);
-            fieldsArr.forEach(function (cur, index, array) {
+            fieldsArr.forEach(function (current, index, array) {
                 current.value = "";
             });
+
+            fieldsArr[0].focus();
         },
 
         getDOMstrings: function () {
@@ -132,18 +134,34 @@ var controller = (function (budgetCtrl, UICtrl) {
         });
     };
 
-    var ctrlAddItem = function () {
-        var input, newItem;
-        // get input data
-        input = UICtrl.getInput();
-        console.log(input);
-        // add item to budget
-        newItem = budgetCtrl.addItem(input.type, input.description, input.value);
-        // add to UI
-        UICtrl.addListItem(newItem, input.type);
+    var updateBudget = function () {
+
         // calculate budget
+        // return the budget
         // display budget on UI
 
+
+
+    }
+
+    var ctrlAddItem = function () {
+        var input, newItem;
+
+        // get input data
+        input = UICtrl.getInput();
+
+        //make sure actual data is entered into UI fields
+        if (input.description !== "" && !isNaN(input.value) && input.value > 0) {
+
+            // add item to budget
+            newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+            // add to UI
+            UICtrl.addListItem(newItem, input.type);
+            //clear the fields on the UI
+            UICtrl.clearFields();
+            // calculate and update budget
+            updateBudget();
+        }
     };
 
     return {
