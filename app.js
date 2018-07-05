@@ -95,7 +95,7 @@ var budgetController = (function () {
         calculatePercentages: function () {
 
 
-        }
+        },
 
         getBudget: function () {
             return {
